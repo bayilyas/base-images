@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 
-docker build --build-arg BASE_TAG=bookworm -t debian:bookworm-ohmyzsh --platform linux/amd64 .
+BASE_IMAGE="debian:bookworm"
+IMAGE_TAG="$BASE_IMAGE-ohmyzsh"
+
+bash ../base-build.sh --base-image "$BASE_IMAGE" -t "$IMAGE_TAG" --platform linux/amd64 "$@"

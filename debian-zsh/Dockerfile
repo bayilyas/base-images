@@ -1,5 +1,5 @@
-ARG BASE_TAG=bookworm
-FROM debian:${BASE_TAG}
+ARG BASE_IMAGE=debian:bookworm
+FROM ${BASE_IMAGE}
 
 # Install common tools
 RUN apt update && apt install -y \
