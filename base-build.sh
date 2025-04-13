@@ -4,8 +4,8 @@
 function display_help() {
     printf "\n\033[1mUsage:\033[0m %s [OPTIONS] [DOCKER_BUILD_ARGS]\n\n" "$0"
     printf "\033[1mOptions:\033[0m\n"
-    printf "  \033[36m%-20s\033[0m %s\n" "-b, --base-image" "Set the base image (default: bookworm)"
-    printf "  \033[36m%-20s\033[0m %s\n" "-t, --tag"         "Docker image tag (default: debian:bookworm-zsh)"
+    printf "  \033[36m%-20s\033[0m %s\n" "-b, --base-image" "Set the base image (required)"
+    printf "  \033[36m%-20s\033[0m %s\n" "-t, --tag"         "Docker image tag (required)"
     printf "  \033[36m%-20s\033[0m %s\n" "-h, --help"        "Display this help message"
     printf "\n\033[1mDOCKER_BUILD_ARGS:\033[0m\n"
     printf "  Any additional arguments will be passed directly to the 'docker build' command.\n\n"
@@ -58,6 +58,13 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
+
+# Check if required parameters are missing
+if [[ -z "$BASE_IMAGE" || -z "$IMAGE_TAG" ]]; then
+    printf "\033[31m❌ Error: Both --base-image and --tag are required.\033[0m\n"
+    printf "The base image and not design to run on its own.\n"
+    display_help
+fi
 
 cmd=(docker build . -t "$IMAGE_TAG" --build-arg "BASE_IMAGE=$BASE_IMAGE" "${DOCKER_BUILD_ARGS[@]}")
 
